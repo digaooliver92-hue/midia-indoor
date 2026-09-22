@@ -1,0 +1,33 @@
+name: Compilar APK Midia Indoor
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar Repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Instalar ferramenta de APK (Cordova/Capacitor ou Wrapper)
+        run: |
+          npm install -g nativefier
+          nativefier --name "MidiaIndoor" "https://digaooliver92-hue.github.io/midia-indoor/" --platform android --arch armv7 --disable-dev-tools
+
+      - name: Organizar e Salvar APK
+        run: |
+          mkdir -p output_apk
+          mv MidiaIndoor-android/* output_apk/ 2>/dev/null || cp -r *output* output_apk/
+
+      - name: Enviar APK gerado para os artefatos
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-midia-indoor-apk
+          path: output_apk/
