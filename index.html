@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Mídia Indoor 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; background: #000; overflow: hidden; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <video id="player" autoplay muted playsinline></video>
+    <script>
+        // Lista de vídeos puxada direto da VPS do cliente
+        const playlist = [
+            "http://167.99.4.209/cliente_joao/videos/comercial1.mp4",
+            "http://167.99.4.209/cliente_joao/videos/comercial2.mp4"
+        ];
+        
+        let currentIndex = 0;
+        const videoElement = document.getElementById('player');
+
+        function playNext() {
+            if (playlist.length === 0) return;
+            videoElement.src = playlist[currentIndex];
+            videoElement.load();
+            videoElement.play().catch(e => console.log("Erro ao reproduzir:", e));
+            
+            currentIndex = (currentIndex + 1) % playlist.length;
+        }
+
+        videoElement.addEventListener('ended', playNext);
+        playNext();
+    </script>
+</body>
+</html>
